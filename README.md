@@ -1,68 +1,181 @@
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+# React with Tailwind
 
-## Available Scripts
+> create-react-app에서 tailwind 설치
 
-In the project directory, you can run:
+dev 사이트의 hagnerd님의 글을 인용하였습니다. [링크](https://dev.to/hagnerd/setting-up-tailwind-with-create-react-app-4jd)
 
-### `yarn start`
+## 설치
 
-Runs the app in the development mode.<br />
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+create-react-app을 설치합니다.
 
-The page will reload if you make edits.<br />
-You will also see any lint errors in the console.
+```
+npx create-react-app react_tailwind && cd react_tailwind
+```
 
-### `yarn test`
+생성한 프로젝트에서 tailwind와 dependancy들을 설치합니다.
 
-Launches the test runner in the interactive watch mode.<br />
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+```
+yarn add -D tailwindcss autoprefixer postcss-cli
+```
 
-### `yarn build`
+## 설정
 
-Builds the app for production to the `build` folder.<br />
-It correctly bundles React in production mode and optimizes the build for the best performance.
+root 폴더에서 `postcss.config.js` 파일을 생성하고 아래와 같이 입력합니다.
 
-The build is minified and the filenames include the hashes.<br />
-Your app is ready to be deployed!
+```
+// postcss.config.js
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+module.exports = {
+  plugins: [
+    require('tailwindcss'),
+    require('autoprefixer'),
+  ]
+}
+```
 
-### `yarn eject`
+> 현재 디렉토리
+> |-📂react_tailwind (root)
+> | |-📂node_modules
+> | |-📂public
+> | |-📂src
+> | |-package.json
+> | |-postcss.config.json
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+그다음 tailwind를 초기화 합니다.
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+```
+npx tailwind init
+```
 
-Instead, it will copy all the configuration files and the transitive dependencies (Webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+`src` 폴더로 들어가 `styles` 폴더를 생성 후 들어가 `tailwind.css`를 생성합니다.
+그리고 아래와 같이 입력합니다.
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
+```
+// src/styles/tailwind.css
 
-## Learn More
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+```
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+##### package.json에서 다음과 같이 수정합니다.
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+```
+// package.json
+{
+    //...
+    "scripts": {
+        "start": "react-scripts start",
+        "build": "react-scripts build",
+        "test": "react-scripts test",
+        "eject": "react-scripts eject",
 
-### Code Splitting
+        // 추가
+        "build:styles": "postcss src/styles/tailwind.css -o src/styles/styles.css",
+        "prebuild": "yarn build:styles",
+        "prestart": "yarn build:styles"
+    }
+}
+```
 
-This section has moved here: https://facebook.github.io/create-react-app/docs/code-splitting
+만약 `yarn`이 깔려있지 않다면 `npm run`으로 바꿔도 상관 없습니다.
 
-### Analyzing the Bundle Size
+```
+// package.json
+{
+    //...
+    "scripts": {
+        "start": "react-scripts start",
+        "build": "react-scripts build",
+        "test": "react-scripts test",
+        "eject": "react-scripts eject",
 
-This section has moved here: https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size
+        // 추가
+        "build:styles": "postcss src/styles/tailwind.css -o src/styles/styles.css",
+        "prebuild": "npm run build:styles",
+        "prestart": "npm run build:styles"
+    }
+}
+```
 
-### Making a Progressive Web App
+`src` 폴더로 들어가 필요없는 파일을 삭제합니다. (`App.js`와 `index.js`만 남김)
 
-This section has moved here: https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app
+> 현재 디렉토리
+> |-📂react_tailwind (root)
+> | |-📂node_modules
+> | |-📂public
+> | |-📂src
+> | | |-App.js
+> | | |-index.js
+> | |-package.json
+> | |-postcss.config.json
+> | |-tailwind.config.json
 
-### Advanced Configuration
+## 빌드 & 테스트
 
-This section has moved here: https://facebook.github.io/create-react-app/docs/advanced-configuration
+`index.js`로 들어가 아래와 같이 수정합니다.
 
-### Deployment
+```
+// src/index.js
 
-This section has moved here: https://facebook.github.io/create-react-app/docs/deployment
+import React from "react";
+import ReactDOM from "react-dom";
+import App from "./App";
+import "./styles/styles.css";
 
-### `yarn build` fails to minify
+ReactDOM.render(<App />, document.getElementById("root"));
+```
 
-This section has moved here: https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify
+`App.js`도 수정합니다.
+
+```
+// src/App.js
+
+import React from "react";
+import Button from "Components/Button";
+
+class App extends React.Component {
+  render() {
+    return (
+      <div className="flex flex-col w-3/4 mx-auto my-12 items-center">
+        <h1>Super cool page</h1>
+        <Button onClick={() => alert("I was clicked")}>
+          I am a button
+        </Button>
+      </div>
+    );
+  }
+}
+
+export default App;
+```
+
+`src` 폴더에 `Components` 폴더를 추가하여 `Button.js` 파일을 추가합니다.
+
+```
+// src/Components/Button.js
+
+import React from "react";
+
+export default function Button({ children, ...buttonProps }) {
+  return (
+    <button
+      className="px-2 py-1 rounded-lg bg-green-400 text-green-800 text-xl font-light uppercase shadow-md hover:shadow-lg"
+      {...buttonProps}
+    >
+      {children}
+    </button>
+  );
+}
+```
+
+`yarn start` 혹은 `npm start` 를 실행 후 확인해 보세요.
+
+## 🤝 Connect
+
+잘못된 정보가 있으면 알려주세요!
+
+```
+github : https://github.com/halfmoonpdh
+email  : enqn0903@naver.com
+```
