@@ -34,12 +34,15 @@ module.exports = {
 ```
 
 > 현재 디렉토리
-> |-📂react_tailwind (root)
-> | |-📂node_modules
-> | |-📂public
-> | |-📂src
-> | |-package.json
-> | |-postcss.config.json
+
+```
+|-📂react_tailwind (root)
+| |-📂node_modules
+| |-📂public
+| |-📂src
+| |-package.json
+| |-postcss.config.json
+```
 
 그다음 tailwind를 초기화 합니다.
 
@@ -101,15 +104,18 @@ npx tailwind init
 `src` 폴더로 들어가 필요없는 파일을 삭제합니다. (`App.js`와 `index.js`만 남김)
 
 > 현재 디렉토리
-> |-📂react_tailwind (root)
-> | |-📂node_modules
-> | |-📂public
-> | |-📂src
-> | | |-App.js
-> | | |-index.js
-> | |-package.json
-> | |-postcss.config.json
-> | |-tailwind.config.json
+
+```
+|-📂react_tailwind (root)
+| |-📂node_modules
+| |-📂public
+| |-📂src
+| | |-App.js
+| | |-index.js
+| |-package.json
+| |-postcss.config.json
+| |-tailwind.config.json
+```
 
 ## 빌드 & 테스트
 
